@@ -42,15 +42,11 @@ public class BiController {
         // SQL
         explicitDF.registerTempTable("articles");
 
-	        //Dataset<String> centenarians = spark.sql("SELECT count(latitude), date_pub FROM articles GROUP BY date_pub").toJSON();
-	        //centenarians.show();
-	        
-	        //System.out.println(centenarians.count());
+	 
 	        
 	        Dataset<Row> teenagers = spark.sql("SELECT count(latitude), date_pub FROM articles GROUP BY date_pub");
 	        List<String> teenagerNames = teenagers.toJavaRDD()
 	            .map((Row row) -> "{" + row.get(1)+": "+ row.get(0) +"}").collect();
-	        //return centenarians; 
 	        System.out.println(teenagerNames);
 
 	}
