@@ -34,6 +34,6 @@ public class ArticleService {
 	public void getAllArticles(){
 		
 	}
-
+*/
 
 }
