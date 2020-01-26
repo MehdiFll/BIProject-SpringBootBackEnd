@@ -16,9 +16,9 @@ public class Controller {
 
 	
 	@GetMapping("/api/articles/")
-	public List<Article> allArticles() {
+	public  void allArticles() {
 	ArticleService articleservice = new ArticleService();
-	return articleservice.getAllArticles();
+	
 	}
 	
 	
