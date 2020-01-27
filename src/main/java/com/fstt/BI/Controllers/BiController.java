@@ -90,8 +90,9 @@ public class BiController {
 		Dataset<Row> titles = spark.sql("SELECT title FROM articles where title != \"\"");
 		
 		List<Tuple2<String, Integer>> counts = titles.toJavaRDD()
-				.flatMap(s -> Arrays.asList(((String) s.get(0)).toLowerCase().split(" ")).iterator())
-				.mapToPair(word -> word.equals("for") ? null : new Tuple2<>(word, 1))
+				.flatMap(s -> Arrays.asList(((String) s.get(0)).toLowerCase().replaceAll("for", "").replaceAll("and", "")
+						.replaceAll("or", "").replaceAll("of", "").split(" ")).iterator())
+				.mapToPair(word -> new Tuple2<>(word, 1))
 				.reduceByKey((a, b) -> a + b)
 				.mapToPair(x -> x.swap())
 				.sortByKey(false)
