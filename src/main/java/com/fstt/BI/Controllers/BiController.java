@@ -90,8 +90,9 @@ public class BiController {
 		Dataset<Row> titles = spark.sql("SELECT title FROM articles where title != \"\"");
 		
 		List<Tuple2<String, Integer>> counts = titles.toJavaRDD()
-				.flatMap(s -> Arrays.asList(((String) s.get(0)).toLowerCase().replaceAll("for", "").replaceAll("and", "")
-						.replaceAll("or", "").replaceAll("of", "").split(" ")).iterator())
+				.flatMap(s -> Arrays.asList(((String) s.get(0)).toLowerCase()
+						.replace(":","")
+						.replaceAll("\\b( ?'s|an|of|to|a|and|in|that|the|from|under|for|with|on)\\b", "").split(" ")).iterator())
 				.mapToPair(word -> new Tuple2<>(word, 1))
 				.reduceByKey((a, b) -> a + b)
 				.mapToPair(x -> x.swap())
@@ -107,6 +108,8 @@ public class BiController {
 			return tuple1._2 < tuple2._2 ? 0 : 1;
 		}
 	}
+
+
 
 	public void test() {
 		SparkSession spark = SparkSession.builder().master("local").appName("MongoSparkConnectorIntro")
